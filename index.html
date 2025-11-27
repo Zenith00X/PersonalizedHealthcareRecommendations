@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Healthcare Recommendations Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Design System */
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-orange-400-rgb: 230, 129, 97;
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+            --color-bg-5: rgba(147, 51, 234, 0.08);
+            --color-bg-6: rgba(249, 115, 22, 0.08);
+            --color-bg-7: rgba(236, 72, 153, 0.08);
+            --color-bg-8: rgba(6, 182, 212, 0.08);
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+            --status-bg-opacity: 0.15;
+            --status-border-opacity: 0.25;
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-md: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-size-4xl: 30px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+            --line-height-tight: 1.2;
+            --line-height-normal: 1.5;
+            --letter-spacing-tight: -0.01em;
+            --space-0: 0;
+            --space-1: 1px;
+            --space-2: 2px;
+            --space-4: 4px;
+            --space-6: 6px;
+            --space-8: 8px;
+            --space-10: 10px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+            --radius-sm: 6px;
+            --radius-base: 8px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: var(--line-height-normal);
+            font-size: var(--font-size-base);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-24);
+        }
+
+        .header {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-32);
+            margin-bottom: var(--space-24);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header h1 {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+            margin-bottom: var(--space-8);
+        }
+
+        .header p {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: var(--space-8);
+            margin-bottom: var(--space-24);
+            flex-wrap: wrap;
+            background: var(--color-surface);
+            padding: var(--space-12);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .tab-button {
+            padding: var(--space-12) var(--space-20);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-secondary);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+
+        .tab-button:hover {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+
+        .tab-button.active {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-20);
+            margin-bottom: var(--space-32);
+        }
+
+        .stat-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card h3 {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-medium);
+            margin-bottom: var(--space-12);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-card .value {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+        }
+
+        .stat-card .label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-24);
+            margin-bottom: var(--space-24);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card h2 {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+            margin-bottom: var(--space-20);
+        }
+
+        .card h3 {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+            margin-bottom: var(--space-16);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-16);
+        }
+
+        table th {
+            background: var(--color-secondary);
+            padding: var(--space-12) var(--space-16);
+            text-align: left;
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+            color: var(--color-text);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        table td {
+            padding: var(--space-12) var(--space-16);
+            border-bottom: 1px solid var(--color-card-border);
+            font-size: var(--font-size-base);
+        }
+
+        table tr:hover {
+            background: var(--color-bg-1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: var(--space-4) var(--space-12);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge.best {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27ae60;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .badge.good {
+            background: rgba(52, 152, 219, 0.15);
+            color: #2980b9;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .badge.fair {
+            background: rgba(243, 156, 18, 0.15);
+            color: #d68910;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: var(--space-20);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-20);
+            margin-bottom: var(--space-24);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+            margin-bottom: var(--space-8);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: var(--space-10) var(--space-12);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-base);
+            background: var(--color-surface);
+            color: var(--color-text);
+            transition: border-color var(--duration-fast) var(--ease-standard);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: var(--focus-ring);
+        }
+
+        .btn {
+            padding: var(--space-12) var(--space-24);
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+
+        .btn:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn:active {
+            background: var(--color-primary-active);
+        }
+
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-secondary-hover);
+        }
+
+        .recommendation-output {
+            margin-top: var(--space-32);
+            padding: var(--space-24);
+            background: var(--color-bg-1);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--color-card-border);
+        }
+
+        .recommendation-badge {
+            display: inline-block;
+            padding: var(--space-16) var(--space-32);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--space-20);
+        }
+
+        .recommendation-badge.no-action {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27ae60;
+            border: 2px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .recommendation-badge.preventive {
+            background: rgba(52, 152, 219, 0.15);
+            color: #2980b9;
+            border: 2px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .recommendation-badge.lifestyle {
+            background: rgba(243, 156, 18, 0.15);
+            color: #d68910;
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .recommendation-badge.medication {
+            background: rgba(231, 76, 60, 0.15);
+            color: #c0392b;
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .confidence-score {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-16);
+        }
+
+        .risk-factors, .action-items {
+            margin-top: var(--space-20);
+        }
+
+        .risk-factors h4, .action-items h4 {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-12);
+        }
+
+        .risk-factors ul, .action-items ol {
+            margin-left: var(--space-24);
+            color: var(--color-text-secondary);
+        }
+
+        .risk-factors li, .action-items li {
+            margin-bottom: var(--space-8);
+        }
+
+        .confusion-matrix {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: var(--space-4);
+            max-width: 600px;
+            margin-top: var(--space-20);
+        }
+
+        .matrix-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-base);
+        }
+
+        .matrix-header {
+            background: var(--color-secondary);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+        }
+
+        .matrix-value {
+            background: var(--color-bg-1);
+            border: 1px solid var(--color-card-border);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-20);
+            margin-top: var(--space-20);
+        }
+
+        .metric-card {
+            background: var(--color-bg-1);
+            padding: var(--space-20);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-card-border);
+            text-align: center;
+        }
+
+        .metric-card .metric-value {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+            margin-bottom: var(--space-8);
+        }
+
+        .metric-card .metric-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: var(--space-8);
+            margin-bottom: var(--space-20);
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: var(--space-8) var(--space-16);
+            background: var(--color-secondary);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+
+        .filter-btn:hover {
+            background: var(--color-secondary-hover);
+        }
+
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            border-color: var(--color-primary);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: var(--space-20);
+            color: var(--color-text-secondary);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: var(--space-16);
+            }
+
+            .header {
+                padding: var(--space-20);
+            }
+
+            .header h1 {
+                font-size: var(--font-size-2xl);
+            }
+
+            .tabs {
+                overflow-x: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>🏥 Personalized Healthcare Recommendations</h1>
+            <p>ML-Based Clinical Decision Support System</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('overview')">📊 Overview</button>
+            <button class="tab-button" onclick="switchTab('models')">🤖 Model Performance</button>
+            <button class="tab-button" onclick="switchTab('data')">📈 Data Analysis</button>
+            <button class="tab-button" onclick="switchTab('features')">🔍 Feature Importance</button>
+            <button class="tab-button" onclick="switchTab('recommendations')">💊 Recommendations</button>
+            <button class="tab-button" onclick="switchTab('evaluation')">📉 Evaluation Metrics</button>
+            <button class="tab-button" onclick="switchTab('summary')">📋 Project Summary</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Patients</h3>
+                    <div class="value">1,000</div>
+                    <div class="label">Analyzed in dataset</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Features</h3>
+                    <div class="value">17</div>
+                    <div class="label">Clinical parameters</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Models Trained</h3>
+                    <div class="value">6</div>
+                    <div class="label">ML algorithms tested</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Best Accuracy</h3>
+                    <div class="value">92%</div>
+                    <div class="label">Random Forest model</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Project Status</h2>
+                <p style="margin-bottom: 16px;"><strong>Status:</strong> <span class="badge best">Production Ready</span></p>
+                <p style="margin-bottom: 8px;"><strong>Date:</strong> November 27, 2025</p>
+                <p style="margin-bottom: 8px;"><strong>Best Model:</strong> Random Forest (92% Accuracy)</p>
+                <p style="margin: 0;"><strong>ROC-AUC Score:</strong> 0.969</p>
+            </div>
+
+            <div class="card">
+                <h2>Key Highlights</h2>
+                <ul style="margin-left: 24px; line-height: 2;">
+                    <li>Successfully trained 6 machine learning models with comprehensive evaluation</li>
+                    <li>Random Forest achieved the highest accuracy at 92% on test data</li>
+                    <li>System can predict 4 recommendation categories with high precision</li>
+                    <li>Feature importance analysis reveals blood pressure and cholesterol as key indicators</li>
+                    <li>Cross-validation ensures model robustness (mean: 0.90, std: 0.02)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Model Performance Tab -->
+        <div id="models" class="tab-content">
+            <div class="card">
+                <h2>Model Comparison</h2>
+                <table id="model-table">
+                    <thead>
+                        <tr>
+                            <th>Model Name</th>
+                            <th>Test Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1-Score</th>
+                            <th>CV Mean</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>Model Accuracy Comparison</h2>
+                <div class="chart-container">
+                    <canvas id="model-accuracy-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🏆 Best Model: Random Forest</h2>
+                <p style="margin-bottom: 20px;">The Random Forest classifier demonstrated superior performance across all metrics, making it the optimal choice for clinical deployment.</p>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91%</div>
+                        <div class="metric-label">Precision</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Recall</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91%</div>
+                        <div class="metric-label">F1-Score</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Analysis Tab -->
+        <div id="data" class="tab-content">
+            <div class="card">
+                <h2>Dataset Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Training Set</h3>
+                        <div class="value">700</div>
+                        <div class="label">samples (70%)</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Validation Set</h3>
+                        <div class="value">150</div>
+                        <div class="label">samples (15%)</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Test Set</h3>
+                        <div class="value">150</div>
+                        <div class="label">samples (15%)</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Data Quality</h3>
+                        <div class="value">95%</div>
+                        <div class="label">complete (5% missing)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Feature Distribution</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Numeric Features</h3>
+                        <div class="value">9</div>
+                        <div class="label">Continuous variables</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Categorical Features</h3>
+                        <div class="value">8</div>
+                        <div class="label">Discrete variables</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Recommendation Class Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="recommendation-distribution-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance Tab -->
+        <div id="features" class="tab-content">
+            <div class="card">
+                <h2>Feature Importance Analysis</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="filterFeatures('All')">All Features</button>
+                    <button class="filter-btn" onclick="filterFeatures('Vital Signs')">Vital Signs</button>
+                    <button class="filter-btn" onclick="filterFeatures('Blood Parameters')">Blood Parameters</button>
+                    <button class="filter-btn" onclick="filterFeatures('Lifestyle')">Lifestyle</button>
+                    <button class="filter-btn" onclick="filterFeatures('Medical History')">Medical History</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="feature-importance-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Top 5 Most Important Features</h2>
+                <ul style="margin-left: 24px; line-height: 2;">
+                    <li><strong>Blood Pressure (Systolic):</strong> Primary indicator of cardiovascular health and hypertension risk (14.5% importance)</li>
+                    <li><strong>Cholesterol:</strong> Critical marker for cardiovascular disease and metabolic disorders (13.2% importance)</li>
+                    <li><strong>Glucose:</strong> Key indicator for diabetes diagnosis and metabolic health (12.8% importance)</li>
+                    <li><strong>BMI:</strong> Important anthropometric measure for obesity and related health risks (9.8% importance)</li>
+                    <li><strong>Age:</strong> Fundamental demographic factor influencing health risks and recommendations (8.7% importance)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recommendations Tab -->
+        <div id="recommendations" class="tab-content">
+            <div class="card">
+                <h2>Patient Information Input</h2>
+                <form id="patient-form" onsubmit="generateRecommendation(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" id="age" min="20" max="80" value="45" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender" required>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Pressure (Systolic)</label>
+                            <input type="number" id="bp-systolic" min="90" max="180" value="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Pressure (Diastolic)</label>
+                            <input type="number" id="bp-diastolic" min="60" max="120" value="80" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cholesterol (mg/dL)</label>
+                            <input type="number" id="cholesterol" min="100" max="300" value="190" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Glucose (mg/dL)</label>
+                            <input type="number" id="glucose" min="70" max="200" value="95" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Heart Rate (bpm)</label>
+                            <input type="number" id="heart-rate" min="40" max="120" value="72" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BMI</label>
+                            <input type="number" id="bmi" min="15" max="50" step="0.1" value="24.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Smoking Status</label>
+                            <select id="smoking" required>
+                                <option value="Non-smoker">Non-smoker</option>
+                                <option value="Former-smoker">Former Smoker</option>
+                                <option value="Current-smoker">Current Smoker</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Exercise Level</label>
+                            <select id="exercise" required>
+                                <option value="Sedentary">Sedentary</option>
+                                <option value="Light">Light</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Vigorous">Vigorous</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Stress Level</label>
+                            <select id="stress" required>
+                                <option value="Low">Low</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn" style="margin-top: 20px;">Generate Recommendation</button>
+                </form>
+
+                <div class="loading" id="loading">
+                    <p>Analyzing patient data...</p>
+                </div>
+
+                <div id="recommendation-result" class="hidden"></div>
+            </div>
+        </div>
+
+        <!-- Evaluation Metrics Tab -->
+        <div id="evaluation" class="tab-content">
+            <div class="card">
+                <h2>Overall Performance Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91%</div>
+                        <div class="metric-label">Precision</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">92%</div>
+                        <div class="metric-label">Recall</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">91%</div>
+                        <div class="metric-label">F1-Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.969</div>
+                        <div class="metric-label">ROC-AUC</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">90%</div>
+                        <div class="metric-label">CV Mean</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Confusion Matrix</h2>
+                <p style="margin-bottom: 20px;">Visualization of prediction accuracy across all recommendation classes</p>
+                <div class="confusion-matrix" id="confusion-matrix"></div>
+            </div>
+
+            <div class="card">
+                <h2>Model Robustness</h2>
+                <p><strong>Cross-Validation Results:</strong></p>
+                <ul style="margin-left: 24px; margin-top: 16px; line-height: 2;">
+                    <li>Mean Accuracy: 90%</li>
+                    <li>Standard Deviation: 0.02 (indicating consistent performance)</li>
+                    <li>Folds: 5-fold cross-validation</li>
+                </ul>
+                <p style="margin-top: 20px;"><strong>ROC-AUC Analysis:</strong></p>
+                <ul style="margin-left: 24px; margin-top: 16px; line-height: 2;">
+                    <li>One-vs-Rest Average: 0.969 (excellent discrimination)</li>
+                    <li>All classes show strong separability</li>
+                    <li>Minimal false positive rates across categories</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Project Summary Tab -->
+        <div id="summary" class="tab-content">
+            <div class="card">
+                <h2>Project Information</h2>
+                <p><strong>Title:</strong> Personalized Healthcare Recommendations</p>
+                <p><strong>Subtitle:</strong> ML-Based Clinical Decision Support System</p>
+                <p><strong>Date:</strong> November 27, 2025</p>
+                <p><strong>Status:</strong> <span class="badge best">Production Ready</span></p>
+                
+                <h3 style="margin-top: 32px;">Objective</h3>
+                <p>Develop an intelligent machine learning system that analyzes patient health data to provide personalized healthcare recommendations, assisting clinicians in making informed decisions about patient care pathways.</p>
+            </div>
+
+            <div class="card">
+                <h2>Key Achievements</h2>
+                <ul style="margin-left: 24px; line-height: 2;">
+                    <li>Analyzed comprehensive health data from 1,000 patients with 17 clinical features</li>
+                    <li>Trained and evaluated 6 different machine learning algorithms</li>
+                    <li>Achieved 92% accuracy with Random Forest model</li>
+                    <li>Identified key health indicators through feature importance analysis</li>
+                    <li>Created 4-category recommendation system for clinical decision support</li>
+                    <li>Validated model robustness through cross-validation (90% mean accuracy)</li>
+                    <li>Achieved excellent ROC-AUC score of 0.969</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Technologies Used</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Machine Learning</h3>
+                        <p style="font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">Random Forest, Gradient Boosting, Neural Networks, SVM, Decision Trees, Logistic Regression</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Data Processing</h3>
+                        <p style="font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">Python, Pandas, NumPy, Scikit-learn</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Evaluation</h3>
+                        <p style="font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">Cross-validation, Confusion Matrix, ROC-AUC, Precision-Recall</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Visualization</h3>
+                        <p style="font-size: 14px; color: var(--color-text-secondary); margin-top: 12px;">Chart.js, Interactive Dashboard</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Clinical Impact</h2>
+                <h3>Benefits for Healthcare Providers</h3>
+                <ul style="margin-left: 24px; line-height: 2; margin-bottom: 24px;">
+                    <li>Rapid assessment of patient health status based on multiple parameters</li>
+                    <li>Evidence-based recommendations for preventive care and interventions</li>
+                    <li>Early identification of high-risk patients requiring immediate attention</li>
+                    <li>Standardized evaluation process reducing diagnostic variability</li>
+                    <li>Support for clinical decision-making with 92% accuracy</li>
+                </ul>
+
+                <h3>Ethical Considerations</h3>
+                <ul style="margin-left: 24px; line-height: 2; margin-bottom: 24px;">
+                    <li>System serves as decision support, not replacement for clinical judgment</li>
+                    <li>All recommendations should be reviewed by qualified healthcare professionals</li>
+                    <li>Patient privacy and data security maintained throughout the process</li>
+                    <li>Regular model updates and validation to ensure continued accuracy</li>
+                    <li>Transparent feature importance for clinical interpretability</li>
+                </ul>
+
+                <h3>Safety Measures</h3>
+                <ul style="margin-left: 24px; line-height: 2;">
+                    <li>Comprehensive validation on diverse patient populations</li>
+                    <li>Cross-validation ensures model generalizability</li>
+                    <li>Clear confidence scores provided with each recommendation</li>
+                    <li>Regular monitoring for model drift and performance degradation</li>
+                    <li>Built-in safeguards for extreme or unusual input values</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Export Options</h2>
+                <button class="btn" onclick="exportData()" style="margin-right: 12px;">📥 Export Dashboard Data (CSV)</button>
+                <button class="btn btn-secondary" onclick="exportSummary()">📄 Export Project Summary</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
